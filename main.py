@@ -48,7 +48,22 @@ def view_flashcards():
         return
 
     for index, card in enumerate(flashcards, start=1):
-        flashcard_list.insert(tk.END, f"{index}. {card['question']} - {card['answer']}")
+        flashcard_list.insert(tk.END, f"{index}. {card['question']}")
+
+def show_selected_answer(event):
+    selected_index = flashcard_list.curselection()
+    
+    if not selected_index:
+        return
+    
+    index = selected_index[0]
+    
+    if index >= len(flashcards):
+        return
+    
+    question = flashcards[index]["question"]
+    answer = flashcards[index]["answer"]
+    messagebox.showinfo("Flashcard Answer", f"Question: {question}\n\nAnswer: {answer}")
         
 def hide_flashcards():
     flashcard_list.delete(0, tk.END)
@@ -137,6 +152,8 @@ hide_button.pack(side=tk.LEFT, padx=5)
 
 flashcard_list = tk.Listbox(root, width=70, height=8)
 flashcard_list.pack(pady=10)
+
+flashcard_list.bind("<<ListboxSelect>>", show_selected_answer)
 
 quiz_frame = tk.Frame(root)
 quiz_frame.pack(pady=10)
