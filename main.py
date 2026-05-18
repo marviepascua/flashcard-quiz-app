@@ -75,6 +75,12 @@ def start_quiz():
     if not flashcards:
         messagebox.showwarning("No Flashcards", "Please add flashcards first.")
         return
+    
+    add_button.config(state=tk.DISABLED)
+    view_button.config(state=tk.DISABLED)
+    hide_button.config(state=tk.DISABLED)
+    
+    flashcard_list.delete(0,tk.END)
 
     quiz_cards = flashcards.copy()
     random.shuffle(quiz_cards)
@@ -91,7 +97,10 @@ def show_question():
         feedback_label.config(text="")
     else:
         question_label.config(text="Quiz Complete!")
-        feedback_label.config(text=f"Your score: {score}/{len(quiz_cards)}")
+        feedback_label.config(text=f"Your score: {score}/{len(quiz_cards)}") 
+        add_button.config(state=tk.NORMAL)
+        view_button.config(state=tk.NORMAL)
+        hide_button.config(state=tk.NORMAL)   
 
 
 def check_answer():
