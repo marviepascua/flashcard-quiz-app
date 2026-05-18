@@ -201,7 +201,7 @@ edit_button.pack(side=tk.LEFT, padx=5)
 flashcard_list = tk.Listbox(root, width=70, height=8)
 flashcard_list.pack(pady=10)
 
-flashcard_list.bind("<<ListboxSelect>>", show_selected_answer)
+flashcard_list.bind("<Double-Button-1>", show_selected_answer)
 
 quiz_frame = tk.Frame(root)
 quiz_frame.pack(pady=10)
