@@ -196,8 +196,10 @@ score = 0
 editing_index = None
 
 root = tk.Tk()
+icon = tk.PhotoImage(file="./icon.png")
+root.iconphoto(True, icon)
 root.title("Flashcard Quiz App")
-root.geometry("700x700")
+root.geometry("850x850")
 root.config(bg=BG_COLOR)
 
 title_label = tk.Label(root, text="Flashcard Quiz App", font=("Arial", 24, "bold"), bg=BG_COLOR, fg=TEXT_COLOR)
