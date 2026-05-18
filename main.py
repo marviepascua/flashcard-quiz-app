@@ -50,7 +50,7 @@ def view_flashcards():
     for index, card in enumerate(flashcards, start=1):
         flashcard_list.insert(tk.END, f"{index}. {card['question']} - {card['answer']}")
         
-def hide_flascards():
+def hide_flashcards():
     flashcard_list.delete(0, tk.END)
 
 
@@ -126,11 +126,14 @@ answer_entry.grid(row=1, column=1, padx=5, pady=5)
 add_button = tk.Button(root, text="Add Flashcard", command=add_flashcard)
 add_button.pack(pady=5)
 
-view_button = tk.Button(root, text="View Flashcards", command=view_flashcards)
-view_button.pack(pady=5)
+view_hide_frame = tk.Frame(root)
+view_hide_frame.pack(pady=5)
 
-hide_button = tk.Button(root, text="Hide Flashcards", command=hide_flascards)
-hide_button.pack(pady=5)
+view_button = tk.Button(view_hide_frame, text="View Flashcards", command=view_flashcards)
+view_button.pack(side=tk.LEFT, padx=5)
+
+hide_button = tk.Button(view_hide_frame, text="Hide Flashcards", command=hide_flashcards)
+hide_button.pack(side=tk.LEFT, padx=5)
 
 flashcard_list = tk.Listbox(root, width=70, height=8)
 flashcard_list.pack(pady=10)
