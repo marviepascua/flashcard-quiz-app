@@ -58,6 +58,27 @@ def add_flashcard():
 
     question_entry.delete(0, tk.END)
     answer_entry.delete(0, tk.END)
+    
+def delete_selected_flashcard():
+    selected_index = flashcard_list.curselection()
+
+    if not selected_index:
+        messagebox.showwarning("No Selection", "Please select a flashcard to delete.")
+        return
+
+    index = selected_index[0]
+    selected_card = flashcards[index]
+
+    confirm = messagebox.askyesno(
+        "Delete Flashcard",
+        f"Are you sure you want to delete this flashcard?\n\nQuestion: {selected_card['question']}"
+    )
+
+    if confirm:
+        flashcards.pop(index)
+        save_flashcards()
+        view_flashcards()
+        messagebox.showinfo("Deleted", "Flashcard deleted successfully!")
 
 
 def edit_selected_flashcard():
@@ -120,6 +141,7 @@ def start_quiz():
     view_button.config(state=tk.DISABLED)
     hide_button.config(state=tk.DISABLED)
     edit_button.config(state=tk.DISABLED)
+    delete_button.config(state=tk.DISABLED)
     
     flashcard_list.delete(0,tk.END)
 
@@ -142,7 +164,8 @@ def show_question():
         add_button.config(state=tk.NORMAL)
         view_button.config(state=tk.NORMAL)
         hide_button.config(state=tk.NORMAL)
-        edit_button.config(state=tk.NORMAL)   
+        edit_button.config(state=tk.NORMAL)
+        delete_button.config(state=tk.NORMAL)      
 
 
 def check_answer():
@@ -205,6 +228,9 @@ hide_button.pack(side=tk.LEFT, padx=5)
 
 edit_button = tk.Button(view_hide_frame, text="Edit Selected", command=edit_selected_flashcard, bg=PRIMARY_COLOR, fg=BUTTON_TEXT, activebackground=PRIMARY_HOVER, activeforeground=BUTTON_TEXT, relief="flat", width=18, font=("Arial", 10, "bold"), padx=10, pady=5)
 edit_button.pack(side=tk.LEFT, padx=5)
+
+delete_button = tk.Button(view_hide_frame, text="Delete Selected", command=delete_selected_flashcard, bg=PRIMARY_COLOR, fg=BUTTON_TEXT, activebackground=PRIMARY_HOVER, activeforeground=BUTTON_TEXT, relief="flat", width=18, font=("Arial", 10, "bold"), padx=10, pady=5)
+delete_button.pack(side=tk.LEFT, padx=5)
 
 flashcard_list = tk.Listbox(root, width=70, height=8, bg=LISTBOX_COLOR, fg=TEXT_COLOR, font=("Arial", 10), relief="flat", highlightthickness=2, highlightbackground=BORDER_COLOR, selectbackground=PRIMARY_COLOR, selectforeground="white")
 flashcard_list.pack(pady=10)
