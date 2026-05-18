@@ -1,0 +1,150 @@
+import json
+import random
+import tkinter as tk
+from tkinter import messagebox
+
+FLASHCARD_FILE = "flashcards.json"
+
+
+def load_flashcards():
+    try:
+        with open(FLASHCARD_FILE, "r") as file:
+            return json.load(file)
+    except FileNotFoundError:
+        return []
+
+
+def save_flashcards():
+    with open(FLASHCARD_FILE, "w") as file:
+        json.dump(flashcards, file, indent=4)
+
+
+def add_flashcard():
+    question = question_entry.get().strip()
+    answer = answer_entry.get().strip()
+
+    if question == "" or answer == "":
+        messagebox.showwarning("Missing Input", "Please enter both question and answer.")
+        return
+
+    flashcards.append({
+        "question": question,
+        "answer": answer
+    })
+
+    save_flashcards()
+
+    question_entry.delete(0, tk.END)
+    answer_entry.delete(0, tk.END)
+
+    messagebox.showinfo("Success", "Flashcard added successfully!")
+
+
+def view_flashcards():
+    flashcard_list.delete(0, tk.END)
+
+    if not flashcards:
+        flashcard_list.insert(tk.END, "No flashcards available.")
+        return
+
+    for index, card in enumerate(flashcards, start=1):
+        flashcard_list.insert(tk.END, f"{index}. {card['question']} - {card['answer']}")
+
+
+def start_quiz():
+    global quiz_cards, current_card, score
+
+    if not flashcards:
+        messagebox.showwarning("No Flashcards", "Please add flashcards first.")
+        return
+
+    quiz_cards = flashcards.copy()
+    random.shuffle(quiz_cards)
+    current_card = 0
+    score = 0
+
+    show_question()
+
+
+def show_question():
+    if current_card < len(quiz_cards):
+        question_label.config(text=quiz_cards[current_card]["question"])
+        quiz_answer_entry.delete(0, tk.END)
+        feedback_label.config(text="")
+    else:
+        question_label.config(text="Quiz Complete!")
+        feedback_label.config(text=f"Your score: {score}/{len(quiz_cards)}")
+
+
+def check_answer():
+    global current_card, score
+
+    if current_card >= len(quiz_cards):
+        return
+
+    user_answer = quiz_answer_entry.get().strip().lower()
+    correct_answer = quiz_cards[current_card]["answer"].strip().lower()
+
+    if user_answer == correct_answer:
+        score += 1
+        feedback_label.config(text="Correct!")
+    else:
+        feedback_label.config(
+            text=f"Incorrect. Correct answer: {quiz_cards[current_card]['answer']}"
+        )
+
+    current_card += 1
+    root.after(1200, show_question)
+
+
+flashcards = load_flashcards()
+quiz_cards = []
+current_card = 0
+score = 0
+
+root = tk.Tk()
+root.title("Flashcard Quiz App")
+root.geometry("600x500")
+
+title_label = tk.Label(root, text="Flashcard Quiz App", font=("Arial", 18, "bold"))
+title_label.pack(pady=10)
+
+input_frame = tk.Frame(root)
+input_frame.pack(pady=10)
+
+tk.Label(input_frame, text="Question:").grid(row=0, column=0, padx=5, pady=5)
+question_entry = tk.Entry(input_frame, width=50)
+question_entry.grid(row=0, column=1, padx=5, pady=5)
+
+tk.Label(input_frame, text="Answer:").grid(row=1, column=0, padx=5, pady=5)
+answer_entry = tk.Entry(input_frame, width=50)
+answer_entry.grid(row=1, column=1, padx=5, pady=5)
+
+add_button = tk.Button(root, text="Add Flashcard", command=add_flashcard)
+add_button.pack(pady=5)
+
+view_button = tk.Button(root, text="View Flashcards", command=view_flashcards)
+view_button.pack(pady=5)
+
+flashcard_list = tk.Listbox(root, width=70, height=8)
+flashcard_list.pack(pady=10)
+
+quiz_frame = tk.Frame(root)
+quiz_frame.pack(pady=10)
+
+start_quiz_button = tk.Button(quiz_frame, text="Start Quiz", command=start_quiz)
+start_quiz_button.pack(pady=5)
+
+question_label = tk.Label(quiz_frame, text="Click Start Quiz to begin", font=("Arial", 12))
+question_label.pack(pady=5)
+
+quiz_answer_entry = tk.Entry(quiz_frame, width=40)
+quiz_answer_entry.pack(pady=5)
+
+check_button = tk.Button(quiz_frame, text="Check Answer", command=check_answer)
+check_button.pack(pady=5)
+
+feedback_label = tk.Label(quiz_frame, text="", font=("Arial", 11))
+feedback_label.pack(pady=5)
+
+root.mainloop()
