@@ -4,6 +4,14 @@ import tkinter as tk
 from tkinter import messagebox
 
 FLASHCARD_FILE = "flashcards.json"
+BG_COLOR = "#fdf2ff"
+CARD_COLOR = "#ffffff"
+PRIMARY_COLOR = "#c77dff"
+PRIMARY_HOVER = "#b05cff"
+TEXT_COLOR = "#5a189a"
+LISTBOX_COLOR = "#fff0fb"
+BORDER_COLOR = "#e9c8ff"
+BUTTON_TEXT = "#ffffff"
 
 
 def load_flashcards():
@@ -51,7 +59,6 @@ def add_flashcard():
     question_entry.delete(0, tk.END)
     answer_entry.delete(0, tk.END)
 
-    messagebox.showinfo("Success", "Flashcard added successfully!")
 
 def edit_selected_flashcard():
     global editing_index
@@ -167,55 +174,56 @@ editing_index = None
 
 root = tk.Tk()
 root.title("Flashcard Quiz App")
-root.geometry("600x600")
+root.geometry("700x700")
+root.config(bg=BG_COLOR)
 
-title_label = tk.Label(root, text="Flashcard Quiz App", font=("Arial", 18, "bold"))
-title_label.pack(pady=10)
+title_label = tk.Label(root, text="Flashcard Quiz App", font=("Arial", 24, "bold"), bg=BG_COLOR, fg=TEXT_COLOR)
+title_label.pack(pady=20)
 
-input_frame = tk.Frame(root)
+input_frame = tk.Frame(root, bg=BG_COLOR, padx=20, pady=20, highlightbackground=BORDER_COLOR, highlightthickness=2)
 input_frame.pack(pady=10)
 
-tk.Label(input_frame, text="Question:").grid(row=0, column=0, padx=5, pady=5)
-question_entry = tk.Entry(input_frame, width=50)
+tk.Label(input_frame, text="Question:", bg=CARD_COLOR, fg=TEXT_COLOR, font=("Arial", 10, "bold")).grid(row=0, column=0, padx=5, pady=5)
+question_entry = tk.Entry(input_frame, width=50, font=("Arial", 10), relief="flat", highlightthickness=2, highlightbackground=BORDER_COLOR)
 question_entry.grid(row=0, column=1, padx=5, pady=5)
 
-tk.Label(input_frame, text="Answer:").grid(row=1, column=0, padx=5, pady=5)
-answer_entry = tk.Entry(input_frame, width=50)
+tk.Label(input_frame, text="Answer:", bg=CARD_COLOR, fg=TEXT_COLOR,font=("Arial", 10, "bold")).grid(row=1, column=0, padx=5, pady=5)
+answer_entry = tk.Entry(input_frame, width=50, font=("Arial", 10), relief="flat", highlightthickness=2, highlightbackground=BORDER_COLOR)
 answer_entry.grid(row=1, column=1, padx=5, pady=5)
 
-add_button = tk.Button(root, text="Add Flashcard", command=add_flashcard)
+add_button = tk.Button(root, text="Add Flashcard", command=add_flashcard, bg=PRIMARY_COLOR, fg=BUTTON_TEXT, activebackground=PRIMARY_HOVER, activeforeground=BUTTON_TEXT, relief="flat", width=18, font=("Arial", 10, "bold"), padx=10, pady=5)
 add_button.pack(pady=5)
 
-view_hide_frame = tk.Frame(root)
+view_hide_frame = tk.Frame(root, bg=BG_COLOR)
 view_hide_frame.pack(pady=5)
 
-view_button = tk.Button(view_hide_frame, text="View Flashcards", command=view_flashcards)
+view_button = tk.Button(view_hide_frame, text="View Flashcards", command=view_flashcards, bg=PRIMARY_COLOR, fg=BUTTON_TEXT, activebackground=PRIMARY_HOVER, activeforeground=BUTTON_TEXT, relief="flat", width=18, font=("Arial", 10, "bold"), padx=10, pady=5)
 view_button.pack(side=tk.LEFT, padx=5)
 
-hide_button = tk.Button(view_hide_frame, text="Hide Flashcards", command=hide_flashcards)
+hide_button = tk.Button(view_hide_frame, text="Hide Flashcards", command=hide_flashcards, bg=PRIMARY_COLOR, fg=BUTTON_TEXT, activebackground=PRIMARY_HOVER, activeforeground=BUTTON_TEXT, relief="flat", width=18, font=("Arial", 10, "bold"), padx=10, pady=5)
 hide_button.pack(side=tk.LEFT, padx=5)
 
-edit_button = tk.Button(view_hide_frame, text="Edit Selected", command=edit_selected_flashcard)
+edit_button = tk.Button(view_hide_frame, text="Edit Selected", command=edit_selected_flashcard, bg=PRIMARY_COLOR, fg=BUTTON_TEXT, activebackground=PRIMARY_HOVER, activeforeground=BUTTON_TEXT, relief="flat", width=18, font=("Arial", 10, "bold"), padx=10, pady=5)
 edit_button.pack(side=tk.LEFT, padx=5)
 
-flashcard_list = tk.Listbox(root, width=70, height=8)
+flashcard_list = tk.Listbox(root, width=70, height=8, bg=LISTBOX_COLOR, fg=TEXT_COLOR, font=("Arial", 10), relief="flat", highlightthickness=2, highlightbackground=BORDER_COLOR, selectbackground=PRIMARY_COLOR, selectforeground="white")
 flashcard_list.pack(pady=10)
 
 flashcard_list.bind("<Double-Button-1>", show_selected_answer)
 
-quiz_frame = tk.Frame(root)
+quiz_frame = tk.Frame(root, bg=BG_COLOR, padx=20, pady=20, highlightbackground=BORDER_COLOR, highlightthickness=2)
 quiz_frame.pack(pady=10)
 
-start_quiz_button = tk.Button(quiz_frame, text="Start Quiz", command=start_quiz)
+start_quiz_button = tk.Button(quiz_frame, text="Start Quiz", command=start_quiz, bg=PRIMARY_COLOR, fg=BUTTON_TEXT, activebackground=PRIMARY_HOVER, activeforeground=BUTTON_TEXT, relief="flat", width=18, font=("Arial", 10, "bold"), padx=10, pady=5)
 start_quiz_button.pack(pady=5)
 
 question_label = tk.Label(quiz_frame, text="Click Start Quiz to begin", font=("Arial", 12))
 question_label.pack(pady=5)
 
-quiz_answer_entry = tk.Entry(quiz_frame, width=40)
+quiz_answer_entry = tk.Entry(quiz_frame, width=50, font=("Arial", 10), relief="flat", highlightthickness=2, highlightbackground=BORDER_COLOR)
 quiz_answer_entry.pack(pady=5)
 
-check_button = tk.Button(quiz_frame, text="Check Answer", command=check_answer)
+check_button = tk.Button(quiz_frame, text="Check Answer", command=check_answer, bg=PRIMARY_COLOR, fg=BUTTON_TEXT, activebackground=PRIMARY_HOVER, activeforeground=BUTTON_TEXT, relief="flat", width=18, font=("Arial", 10, "bold"), padx=10, pady=5)
 check_button.pack(pady=5)
 
 feedback_label = tk.Label(quiz_frame, text="", font=("Arial", 11))

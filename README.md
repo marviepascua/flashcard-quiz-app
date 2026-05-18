@@ -21,4 +21,4 @@ This app allows users to create flashcards, view saved flashcards, and take a qu
 Run the app with:
 
 ```bash
-python main.py
+python3 main.py
