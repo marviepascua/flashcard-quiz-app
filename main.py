@@ -49,6 +49,9 @@ def view_flashcards():
 
     for index, card in enumerate(flashcards, start=1):
         flashcard_list.insert(tk.END, f"{index}. {card['question']} - {card['answer']}")
+        
+def hide_flascards():
+    flashcard_list.delete(0, tk.END)
 
 
 def start_quiz():
@@ -104,7 +107,7 @@ score = 0
 
 root = tk.Tk()
 root.title("Flashcard Quiz App")
-root.geometry("600x500")
+root.geometry("600x600")
 
 title_label = tk.Label(root, text="Flashcard Quiz App", font=("Arial", 18, "bold"))
 title_label.pack(pady=10)
@@ -125,6 +128,9 @@ add_button.pack(pady=5)
 
 view_button = tk.Button(root, text="View Flashcards", command=view_flashcards)
 view_button.pack(pady=5)
+
+hide_button = tk.Button(root, text="Hide Flashcards", command=hide_flascards)
+hide_button.pack(pady=5)
 
 flashcard_list = tk.Listbox(root, width=70, height=8)
 flashcard_list.pack(pady=10)
