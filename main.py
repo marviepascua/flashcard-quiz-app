@@ -20,17 +20,31 @@ def save_flashcards():
 
 
 def add_flashcard():
+    global editing_index
+    
     question = question_entry.get().strip()
     answer = answer_entry.get().strip()
 
     if question == "" or answer == "":
         messagebox.showwarning("Missing Input", "Please enter both question and answer.")
         return
-
-    flashcards.append({
-        "question": question,
-        "answer": answer
-    })
+    
+    if editing_index is not None:
+        flashcards[editing_index] = {
+            "question": question,
+            "answer": answer
+        }
+        
+        editing_index = None
+        add_button.config(text="Add flashcard")
+        messagebox.showinfo("Success", "Flascard updated successfully!")
+    
+    else:
+        flashcards.append({
+            "question": question,
+            "answer": answer
+        })
+        messagebox.showinfo("Success", "Flashcard addedd successfully!")
 
     save_flashcards()
 
@@ -39,6 +53,25 @@ def add_flashcard():
 
     messagebox.showinfo("Success", "Flashcard added successfully!")
 
+def edit_selected_flashcard():
+    global editing_index
+    
+    selected_index = flashcard_list.curselection()
+    
+    if not selected_index:
+        messagebox.showwarning("No selection", "Please select a flashcard to edit.")
+        return
+    
+    editing_index = selected_index[0]
+    selected_card = flashcards[editing_index]
+    
+    question_entry.delete(0, tk.END)
+    answer_entry.delete(0, tk.END)
+    
+    question_entry.insert(0, selected_card["question"])
+    answer_entry.insert(0, selected_card["answer"])
+    
+    add_button.config(text="Save Chagnes")
 
 def view_flashcards():
     flashcard_list.delete(0, tk.END)
@@ -79,6 +112,7 @@ def start_quiz():
     add_button.config(state=tk.DISABLED)
     view_button.config(state=tk.DISABLED)
     hide_button.config(state=tk.DISABLED)
+    edit_button.config(state=tk.DISABLED)
     
     flashcard_list.delete(0,tk.END)
 
@@ -100,7 +134,8 @@ def show_question():
         feedback_label.config(text=f"Your score: {score}/{len(quiz_cards)}") 
         add_button.config(state=tk.NORMAL)
         view_button.config(state=tk.NORMAL)
-        hide_button.config(state=tk.NORMAL)   
+        hide_button.config(state=tk.NORMAL)
+        edit_button.config(state=tk.NORMAL)   
 
 
 def check_answer():
@@ -128,6 +163,7 @@ flashcards = load_flashcards()
 quiz_cards = []
 current_card = 0
 score = 0
+editing_index = None
 
 root = tk.Tk()
 root.title("Flashcard Quiz App")
@@ -158,6 +194,9 @@ view_button.pack(side=tk.LEFT, padx=5)
 
 hide_button = tk.Button(view_hide_frame, text="Hide Flashcards", command=hide_flashcards)
 hide_button.pack(side=tk.LEFT, padx=5)
+
+edit_button = tk.Button(view_hide_frame, text="Edit Selected", command=edit_selected_flashcard)
+edit_button.pack(side=tk.LEFT, padx=5)
 
 flashcard_list = tk.Listbox(root, width=70, height=8)
 flashcard_list.pack(pady=10)
